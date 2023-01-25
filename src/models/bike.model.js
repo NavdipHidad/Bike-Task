@@ -17,7 +17,9 @@ const bikeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    likedUserId: [String],
-});
+    likedByUserId: [String],
+},
+    { timestamps: true }
+);
 
 module.exports = mongoose.model('Bike', bikeSchema);
