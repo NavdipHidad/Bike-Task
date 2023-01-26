@@ -2,7 +2,7 @@ const bikeTypeDB = require('../models/bikeTypes.model');
 
 async function registerNewBikeType(bTypeDtl) {
     if (bTypeDtl) {
-        bikeTypeDB.create(bTypeDtl);
+        bikeTypeDB.create({bikeType: bTypeDtl});
     }
     else {
         throw new Error('Bike-type must be specify');

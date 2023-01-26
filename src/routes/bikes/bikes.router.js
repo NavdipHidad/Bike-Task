@@ -1,7 +1,7 @@
 const express = require('express');
 
 const { httpAddNewBike,
-    httpUpdateBikeEngineType,
+    httpUpdateBike,
     httpDeleteBikeById,
     httpGetAllBikes,
     httpGetBikeByBikeType,
@@ -9,7 +9,7 @@ const { httpAddNewBike,
 
 const bikeRouter = express.Router();
 bikeRouter.post('/addBike', httpAddNewBike);
-bikeRouter.patch('/updateEngineType', httpUpdateBikeEngineType);
+bikeRouter.patch('/updateBike', httpUpdateBike);
 bikeRouter.delete('/deleteBikeById', httpDeleteBikeById);
 bikeRouter.get('/getAllBikes', httpGetAllBikes);
 bikeRouter.get('/getBikeByBikeType', httpGetBikeByBikeType);

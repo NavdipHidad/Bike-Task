@@ -20,19 +20,16 @@ async function registerNewUser(userDtl) {
     if ((!userDtl.firstName) || (!userDtl.lastName) || (!userDtl.email) || (!userDtl.phoneNo)) {
         throw new Error('All required field must not be empty');
     }
-    if (!(userDtl.password).match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)) {
-        throw new Error('Password not strong');
-    }
     else {
-        const isDuplicate = await isUserExist(userDtl['email']);
-        if (isDuplicate) {
-            //console.log('In true');
-            userDtl.password = await bcrypt.hash(userDtl.password, 9);
+        // const isDuplicate = await isUserExist(userDtl['email']);
+        // if (isDuplicate) {
+        //     //console.log('In true');
+        //     userDtl.password = await bcrypt.hash(userDtl.password, 9);
             const result = await usersDB.create(userDtl);
             return result;
-        } else {
-            return { message: `User with Email-ID '${userDtl.email}' is already exist, Please Login` };
-        }
+        // } else {
+        //     return { message: `User with Email-ID '${userDtl.email}' is already exist, Please Login` };
+        // }
         //console.log(userDtl);
     }
 }
