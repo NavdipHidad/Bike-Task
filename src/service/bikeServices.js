@@ -36,11 +36,11 @@ async function updateBike(updateDtl) {
   //return await bikeDB.updateOne({ _id: updateDtl.id }, { $set: { bikeEngineType: updateDtl.engType } });
   if (result["modifiedCount"] === 1) {
     return {
-      message: `Bike with ID '${updateDtl.id}' is updated.`,
+      message: `Bike with ID '${updateDtl.bId}' is updated.`,
     };
   } else {
     return {
-      message: `Bike with ID '${updateDtl.id}' is NOT updated.`,
+      message: `Bike with ID '${updateDtl.bId}' is NOT updated.`,
     };
   }
 }
@@ -82,6 +82,10 @@ async function getMostRecentBike() {
   return await bikeDB.findOne().sort({ createdAt: -1 });
 }
 
+async function getCountOfLikes(bikeDtl) {
+  const result = await bikeDB.findOne({ _id: bikeDtl.bId }, { likedByUserId: 1, _id: 0 });
+  return (result.likedByUserId).length;
+}
 module.exports = {
   addNewBike,
   updateBike,
@@ -90,4 +94,5 @@ module.exports = {
   getBikeByBikeType,
   getMostRecentBike,
   getBikeById,
+  getCountOfLikes,
 };

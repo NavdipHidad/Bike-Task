@@ -20,6 +20,7 @@ async function httpRegisterBikeType(req, res) {
 
 async function httpGetAllBikeType(req, res) {
   try {
+    //console.log('ThI', req.uId);
     return res.status(200).json(await getAllBikeTypes());
   } catch (error) {
     return res.status(500).json({ Error: error });

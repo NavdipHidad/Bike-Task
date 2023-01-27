@@ -7,6 +7,7 @@ const {
   getAllBikes,
   getBikeByBikeType,
   getMostRecentBike,
+  getCountOfLikes,
 } = require("../../service/bikeServices");
 
 const { getAllBikeTypes } = require("../../service/bikeTypesServices");
@@ -26,7 +27,7 @@ async function httpAddNewBike(req, res) {
       bikeBrand: req.body.bikeBrand,
       bikeType: req.body.bikeType,
       bikeEngineType: req.body.bikeEngineType,
-      likedByUserId: req.body.likedByUserId,
+      //likedByUserId: req.body.likedByUserId,
     };
     const isTypeValid = await isBikeTypeValid(bikeDtl.bikeType);
     if (!isTypeValid) {
@@ -114,6 +115,17 @@ async function httpGetRecentBikes(req, res) {
   }
 }
 
+async function httpGetCountOfLikes(req, res) {
+  try {
+    bikeDtl = {
+      bId: req.body.bId,
+    };
+    return res.status(201).json(await getCountOfLikes(bikeDtl));
+  } catch (error) {
+    return res.status(400).json({ Errror: error });
+  }
+}
+
 module.exports = {
   httpAddNewBike,
   httpUpdateBike,
@@ -121,4 +133,5 @@ module.exports = {
   httpGetAllBikes,
   httpGetBikeByBikeType,
   httpGetRecentBikes,
+  httpGetCountOfLikes,
 };
