@@ -120,7 +120,7 @@ async function httpGetCountOfLikes(req, res) {
     bikeDtl = {
       bId: req.body.bId,
     };
-    return res.status(201).json(await getCountOfLikes(bikeDtl));
+    return res.status(200).json(await getCountOfLikes(bikeDtl));
   } catch (error) {
     return res.status(400).json({ Errror: error });
   }

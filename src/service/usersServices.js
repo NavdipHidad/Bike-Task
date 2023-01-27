@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs');
 
 const usersDB = require('../models/users.model');
 const bikeDB = require('../models/bike.model');
+const bikeCommentsDB = require('../models/bikeComments.model');
+
 const { getBikeById } = require('./bikeServices');
 
 async function isUserExist(userEmail) {
@@ -13,6 +15,16 @@ async function isUserExist(userEmail) {
     } else {
         //console.log('this True');
         return true;
+    }
+}
+
+async function isBikeExistById(bId){
+    const result = await bikeDB.findOne({_id: bId});
+    //console.log('bId in check: ', result);
+    if(result){
+        return true;
+    }else{
+        return false;
     }
 }
 
@@ -54,13 +66,52 @@ async function registerNewUser(userDtl) {
 
 async function likeOnBike(likeDtl) {
     const result = await bikeDB.findOne({ _id: likeDtl.bikeId }, { likedByUserId: 1, _id: 0 });
-    (result.likedByUserId).push(likeDtl.bikeId);
-    const updateArray = await bikeDB.updateOne({ _id: likeDtl.bikeId }, { likedByUserId: result.likedByUserId });
-    return updateArray;
+    let updateArray;
+    console.log('in ser', likeDtl.userId);
+    if(!(result.likedByUserId).includes(likeDtl.userId)){
+        (result.likedByUserId).push(likeDtl.userId);
+        updateArray = await bikeDB.updateOne({ _id: likeDtl.bikeId }, { likedByUserId: result.likedByUserId });
+        return {message: `You have liked bike with ID ${likeDtl.bikeId}`};
+    }
+    return {message: `You already liked bike with ID '${likeDtl.bikeId}'`};
+}
+
+async function commentOnBike(commentDtl){
+    const res = await isBikeExistById(commentDtl.bikeId);
+    console.log(res);
+    if(await isBikeExistById(commentDtl.bikeId)){
+        const result = await bikeCommentsDB.findOne({uId: commentDtl.userId, bikeId: commentDtl.bikeId}, {comment:1, _id:0});
+        console.log(result);
+        //let newComment = [];
+        let updateComment;
+        if(!(result === null)){
+            (result.comment).push(commentDtl.comment);
+            updateComment = await bikeCommentsDB.updateOne({uId: commentDtl.userId, bikeId: commentDtl.bikeId}, {comment: result.comment});
+            //return updateComment;
+            if(updateComment['modifiedCount']){
+                return {message: `Successfully commented on bike with ID '${commentDtl.userId}'`};
+            }else{
+                return {message: `Not able to comment`};
+            }
+        }
+        else{
+            const newComment = {
+                uId: commentDtl.userId,
+                bikeId: commentDtl.bikeId,
+                comment: [commentDtl.comment],
+            };
+            const result = await bikeCommentsDB.create(newComment);
+            return result;
+        }
+    }
+    else{
+        return {message: `Bike with ID '${commentDtl.bikeId}' is not available.`}
+    }
 }
 
 module.exports = {
     registerNewUser,
     loginUser,
     likeOnBike,
+    commentOnBike,
 }

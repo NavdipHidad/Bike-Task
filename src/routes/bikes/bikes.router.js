@@ -17,6 +17,6 @@ bikeRouter.delete('/deleteBikeById', verifyToken, httpDeleteBikeById);
 bikeRouter.get('/getAllBikes', verifyToken, httpGetAllBikes);
 bikeRouter.get('/getBikeByBikeType', verifyToken, httpGetBikeByBikeType);
 bikeRouter.get('/getRecentBike', verifyToken, httpGetRecentBikes);
-bikeRouter.get('/getCountOfLikes', verifyToken, httpGetCountOfLikes);
+bikeRouter.post('/getCountOfLikes', verifyToken, httpGetCountOfLikes);
 
 module.exports = bikeRouter;

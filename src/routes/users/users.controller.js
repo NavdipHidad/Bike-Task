@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const usersDB = require("../../models/users.model");
-const { registerNewUser, likeOnBike } = require("../../service/usersServices");
+const { registerNewUser, likeOnBike, commentOnBike } = require("../../service/usersServices");
 
 const SECRET_KEY = 'secretKey4';
 
@@ -81,9 +81,24 @@ async function httpGetAllUser(req, res) {
 	return res.status(201).json(await getAllUsers());
 }
 
+async function httpCommentOnBike(req, res){
+	try{
+		console.log('In Cont', req.uId);
+		const commentDtl = {
+			userId: req.uId,
+			bikeId: req.body.bikeId,
+			comment: req.body.comment
+		}
+		return res.status(201).json(await commentOnBike(commentDtl));
+	} catch (error) {
+		return res.status(500).json({ Error: error });
+	}
+}
+
 module.exports = {
 	httpRegisterUser,
 	httpGetAllUser,
 	httpLoginUser,
 	httpLikeOnBike,
+	httpCommentOnBike,
 };
